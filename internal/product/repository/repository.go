@@ -34,7 +34,6 @@ func (r *productsRep) CreateProduct(product domain.Product) *errors.Error {
 }
 
 func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
-	fmt.Println("eu estou aqui")
 	filter := bson.M{}
 
 	cursor, err := database.Products.Find(context.TODO(), filter)
@@ -42,6 +41,8 @@ func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
 		return nil, errors.NewInternalServerError(err.Error())
 	}
 	defer cursor.Close(context.TODO())
+
+	fmt.Println("eu estou aqui")
 
 	var products []domain.Product
 
@@ -52,6 +53,8 @@ func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
 		}
 		products = append(products, product)
 	}
+
+	fmt.Println("eu estou aqui")
 
 	if err := cursor.Err(); err != nil {
 		return nil, errors.NewInternalServerError(err.Error())
