@@ -1,6 +1,7 @@
 package product
 
 import (
+	"context"
 	"rarefinds-backend/common/date_db"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product/domain"
@@ -11,7 +12,7 @@ import (
 
 type ProductsService interface {
 	CreateProduct(domain.Product) (*domain.Product, *errors.Error)
-	GetAll() ([]domain.Product, *errors.Error)
+	GetAll(context.Context) ([]domain.Product, *errors.Error)
 }
 
 type productsService struct {
@@ -35,8 +36,8 @@ func (s *productsService) CreateProduct(product domain.Product) (*domain.Product
 	return &product, nil
 }
 
-func (s *productsService) GetAll() ([]domain.Product, *errors.Error) {
-	products, err := s.repository.GetAll()
+func (s *productsService) GetAll(ctx context.Context) ([]domain.Product, *errors.Error) {
+	products, err := s.repository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

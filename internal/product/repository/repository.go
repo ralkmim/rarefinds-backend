@@ -13,7 +13,7 @@ import (
 
 type ProductsRep interface {
 	CreateProduct(domain.Product) *errors.Error
-	GetAll() ([]domain.Product, *errors.Error)
+	GetAll(context.Context) ([]domain.Product, *errors.Error)
 }
 
 type productsRep struct {}
@@ -33,19 +33,19 @@ func (r *productsRep) CreateProduct(product domain.Product) *errors.Error {
 	return nil
 }
 
-func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
+func (r *productsRep) GetAll(ctx context.Context) ([]domain.Product, *errors.Error) {
 	filter := bson.M{}
 
-	cursor, err := database.Products.Find(context.TODO(), filter)
+	cursor, err := database.Products.Find(ctx, filter)
 	if err != nil {
 		fmt.Println(err)
 		return nil, errors.NewInternalServerError(err.Error())
 	}
-	defer cursor.Close(context.TODO())
+	defer cursor.Close(ctx)
 
 	var products []domain.Product
 
-	for cursor.Next(context.TODO()) {
+	for cursor.Next(ctx) {
 		var product domain.Product
 		if err := cursor.Decode(&product); err != nil {
 			return nil, errors.NewInternalServerError(err.Error())

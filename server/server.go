@@ -18,6 +18,7 @@ var (
 func StartServer() {
 	productsServer := &http.Server{
 		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
+		// Addr: ":9090",
 		Handler: api.StartProducts(),
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,
