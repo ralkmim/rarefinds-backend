@@ -59,7 +59,6 @@ func(h *productsHandler) CreateProduct(c *gin.Context) {
 }
 
 func (h *productsHandler) GetAll(c *gin.Context) {
-	fmt.Println("eu estou aqui")
 	clients, err := h.service.GetAll()
 	if err != nil {
 		c.JSON(errors.NewNotFoundError(err.Error).Status, errors.NewNotFoundError(err.Message))

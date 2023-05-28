@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"context"
+	"fmt"
 	"rarefinds-backend/common/database"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product/domain"
-	"context"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -33,6 +34,7 @@ func (r *productsRep) CreateProduct(product domain.Product) *errors.Error {
 }
 
 func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
+	fmt.Println("eu estou aqui")
 	filter := bson.M{}
 
 	cursor, err := database.Products.Find(context.TODO(), filter)
