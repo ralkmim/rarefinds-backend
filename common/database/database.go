@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -19,7 +18,6 @@ var (
 )
 
 func init() {
-	fmt.Println("eu estou aqui")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	//TODO: GET A MONGO URI

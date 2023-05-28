@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"rarefinds-backend/common/database"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product/domain"
@@ -37,6 +38,7 @@ func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
 
 	cursor, err := database.Products.Find(context.TODO(), filter)
 	if err != nil {
+		fmt.Println(err)
 		return nil, errors.NewInternalServerError(err.Error())
 	}
 	defer cursor.Close(context.TODO())
