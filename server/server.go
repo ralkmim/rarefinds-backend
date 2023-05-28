@@ -1,10 +1,11 @@
 package server
 
 import (
-	"rarefinds-backend/api"
-	"rarefinds-backend/common/logger"
 	"log"
 	"net/http"
+	"os"
+	"rarefinds-backend/api"
+	"rarefinds-backend/common/logger"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -16,7 +17,7 @@ var (
 
 func StartServer() {
 	productsServer := &http.Server{
-		Addr: ":9090",
+		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
 		Handler: api.StartProducts(),
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,

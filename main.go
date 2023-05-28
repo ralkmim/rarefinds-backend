@@ -1,6 +1,8 @@
 package main
 
-import "rarefinds-backend/server"
+import (
+	"rarefinds-backend/server"
+)
 
 func main() {
 	server.StartServer()
