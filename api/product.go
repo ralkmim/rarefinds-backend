@@ -20,6 +20,7 @@ func StartProducts() http.Handler {
 
 	router.POST("/new-product", productHandler.CreateProduct)
 	router.GET("/products", productHandler.GetAll)
+	router.GET("/ping", productHandler.Ping)
 
 	return router
 }
@@ -27,6 +28,7 @@ func StartProducts() http.Handler {
 type ProductsHandler interface {
 	CreateProduct(*gin.Context)
 	GetAll(*gin.Context)
+	Ping(*gin.Context)
 }
 
 type productsHandler struct {
@@ -64,4 +66,8 @@ func (h *productsHandler) GetAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, clients)
+}
+
+func (h *productsHandler) Ping(c *gin.Context) {
+	c.String(200, "Pong!")
 }
