@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"rarefinds-backend/common/database"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product/domain"
@@ -42,8 +41,6 @@ func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
 	}
 	defer cursor.Close(context.TODO())
 
-	fmt.Println("eu estou aqui")
-
 	var products []domain.Product
 
 	for cursor.Next(context.TODO()) {
@@ -53,8 +50,6 @@ func (r *productsRep) GetAll() ([]domain.Product, *errors.Error) {
 		}
 		products = append(products, product)
 	}
-
-	fmt.Println("eu estou aqui")
 
 	if err := cursor.Err(); err != nil {
 		return nil, errors.NewInternalServerError(err.Error())
