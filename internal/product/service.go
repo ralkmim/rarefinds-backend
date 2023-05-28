@@ -1,10 +1,10 @@
 package product
 
 import (
-	"as_backend/common/date_db"
-	"as_backend/common/errors"
-	"as_backend/internal/product/domain"
-	"as_backend/internal/product/repository"
+	"rarefinds-backend/common/date_db"
+	"rarefinds-backend/common/errors"
+	"rarefinds-backend/internal/product/domain"
+	"rarefinds-backend/internal/product/repository"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

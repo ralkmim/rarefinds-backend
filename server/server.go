@@ -1,8 +1,8 @@
 package server
 
 import (
-	"as_backend/api"
-	"as_backend/common/logger"
+	"rarefinds-backend/api"
+	"rarefinds-backend/common/logger"
 	"log"
 	"net/http"
 	"time"

@@ -1,10 +1,10 @@
 package api
 
 import (
-	"as_backend/common/errors"
-	"as_backend/internal/product"
-	"as_backend/internal/product/domain"
-	"as_backend/internal/product/repository"
+	"rarefinds-backend/common/errors"
+	"rarefinds-backend/internal/product"
+	"rarefinds-backend/internal/product/domain"
+	"rarefinds-backend/internal/product/repository"
 	"fmt"
 	"net/http"
 

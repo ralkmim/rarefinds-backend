@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"as_backend/common/database"
-	"as_backend/common/errors"
-	"as_backend/internal/product/domain"
+	"rarefinds-backend/common/database"
+	"rarefinds-backend/common/errors"
+	"rarefinds-backend/internal/product/domain"
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson"

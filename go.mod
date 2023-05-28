@@ -1,4 +1,4 @@
-module as_backend
+module rarefinds-backend
 
 go 1.19
 
