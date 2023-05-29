@@ -15,7 +15,8 @@ func StartAuth(r *gin.RouterGroup) {
 	authHandler := NewAuthHandler(auth.NewService(auth.NewRepository()))
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500", "https://rarefinds.herokuapp.com"},
+		AllowAllOrigins: 	true,
+		// AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500", "https://rarefinds.herokuapp.com"},
 		AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
 		AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
 										"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
