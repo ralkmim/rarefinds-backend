@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	// "os"
+	"os"
 	"rarefinds-backend/api"
 	"rarefinds-backend/common/logger"
 	"time"
@@ -32,8 +32,8 @@ func StartServer() {
 	api.StartProducts(router.Group("/products"))
 
 	server := &http.Server{
-		// Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
-		Addr: ":9090",
+		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
+		// Addr: ":9090",
 		Handler: router,
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,
