@@ -9,12 +9,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/sync/errgroup"
 )
 
-var (
-	g errgroup.Group
-)
 
 func StartServer() {
 	router := gin.Default()
