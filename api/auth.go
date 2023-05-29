@@ -5,6 +5,7 @@ import (
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/auth"
 	"rarefinds-backend/internal/auth/domain"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -13,17 +14,16 @@ import (
 func StartAuth(r *gin.RouterGroup) {
 	authHandler := NewAuthHandler(auth.NewService(auth.NewRepository()))
 
-	// router.Use(cors.New(cors.Config{
-	// 	AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5173"},
-	// 	AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
-	// 	AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
-	// 									"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
-	// 	ExposeHeaders: 		[]string{"Authorization","Content-Length"},
-	// 	AllowCredentials: 	true,
-	// 	MaxAge: 			12*time.Hour,	
-	// }))
-
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: 	true,
+		// AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500"},
+		AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
+		AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
+										"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
+		ExposeHeaders: 		[]string{"Authorization","Content-Length"},
+		AllowCredentials: 	true,
+		MaxAge: 			12*time.Hour,	
+	}))
 
 	r.POST("/signup", authHandler.SignUp)
 }
