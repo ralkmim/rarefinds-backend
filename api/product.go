@@ -7,14 +7,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func StartProducts(r *gin.RouterGroup) {
 	productHandler := NewProductsHandler(product.NewService(product.NewRepository()))
 
-	r.Use(cors.Default())
 
 	r.POST("/new", productHandler.CreateProduct)
 	r.GET("/", productHandler.GetAll)

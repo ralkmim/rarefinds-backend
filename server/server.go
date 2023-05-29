@@ -3,11 +3,13 @@ package server
 import (
 	"log"
 	"net/http"
-	"os"
+
+	// "os"
 	"rarefinds-backend/api"
 	"rarefinds-backend/common/logger"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,12 +17,23 @@ import (
 func StartServer() {
 	router := gin.Default()
 
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins: 	true,
+		// AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500", "https://rarefinds.herokuapp.com"},
+		AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
+		AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
+										"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
+		ExposeHeaders: 		[]string{"Authorization","Content-Length"},
+		AllowCredentials: 	true,
+		MaxAge: 			12*time.Hour,	
+	}))
+
 	api.StartAuth(router.Group("/auth"))
 	api.StartProducts(router.Group("/products"))
 
 	server := &http.Server{
-		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
-		// Addr: ":9090",
+		// Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
+		Addr: ":9090",
 		Handler: router,
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,
@@ -31,6 +44,7 @@ func StartServer() {
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
+}
 	// productsServer := &http.Server{
 	// 	// Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
 	// 	Addr: ":9090",
@@ -61,4 +75,4 @@ func StartServer() {
 	// if err := g.Wait(); err != nil {
 	// 	log.Fatal(err)
 	// }
-}
+// }
