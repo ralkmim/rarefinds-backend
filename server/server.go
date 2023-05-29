@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"os"
 	"rarefinds-backend/api"
 	"rarefinds-backend/common/logger"
 	"time"
@@ -16,16 +17,16 @@ var (
 
 func StartServer() {
 	productsServer := &http.Server{
-		// Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
-		Addr: ":9090",
+		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
+		// Addr: ":9090",
 		Handler: api.StartProducts(),
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 
 	authServer := &http.Server{
-		// Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
-		Addr: ":9091",
+		Addr: os.Getenv("HOST") + ":" + os.Getenv("PORT"),
+		// Addr: ":9091",
 		Handler: api.StartAuth(),
 		ReadTimeout: 5 * time.Second,
 		WriteTimeout: 10 * time.Second,
