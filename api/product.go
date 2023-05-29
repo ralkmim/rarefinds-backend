@@ -11,17 +11,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func StartProducts() http.Handler {
-	var router = gin.Default()
+func StartProducts(r *gin.RouterGroup) {
 	productHandler := NewProductsHandler(product.NewService(product.NewRepository()))
 
-	router.Use(cors.Default())
+	r.Use(cors.Default())
 
-	router.POST("/new-product", productHandler.CreateProduct)
-	router.GET("/products", productHandler.GetAll)
-	router.GET("/ping", productHandler.Ping)
-
-	return router
+	r.POST("/new", productHandler.CreateProduct)
+	r.GET("/", productHandler.GetAll)
+	r.GET("/ping", productHandler.Ping)
 }
 
 type ProductsHandler interface {

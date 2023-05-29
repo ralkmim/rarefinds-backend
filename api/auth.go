@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/auth"
@@ -11,9 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func StartAuth() http.Handler {
-	fmt.Println("aqui")
-	var router = gin.Default()
+func StartAuth(r *gin.RouterGroup) {
 	authHandler := NewAuthHandler(auth.NewService(auth.NewRepository()))
 
 	// router.Use(cors.New(cors.Config{
@@ -26,11 +23,9 @@ func StartAuth() http.Handler {
 	// 	MaxAge: 			12*time.Hour,	
 	// }))
 
-	router.Use(cors.Default())
+	r.Use(cors.Default())
 
-	router.POST("/signup", authHandler.SignUp)
-
-	return router
+	r.POST("/signup", authHandler.SignUp)
 }
 
 type UsersHandler interface {
