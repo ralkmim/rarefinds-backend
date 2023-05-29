@@ -1,1 +1,65 @@
 package api
+
+import (
+	"fmt"
+	"net/http"
+	"rarefinds-backend/common/errors"
+	"rarefinds-backend/internal/auth"
+	"rarefinds-backend/internal/auth/domain"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+)
+
+func StartAuth() http.Handler {
+	fmt.Println("aqui")
+	var router = gin.Default()
+	authHandler := NewAuthHandler(auth.NewService(auth.NewRepository()))
+
+	// router.Use(cors.New(cors.Config{
+	// 	AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5173"},
+	// 	AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
+	// 	AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
+	// 									"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
+	// 	ExposeHeaders: 		[]string{"Authorization","Content-Length"},
+	// 	AllowCredentials: 	true,
+	// 	MaxAge: 			12*time.Hour,	
+	// }))
+
+	router.Use(cors.Default())
+
+	router.POST("/signup", authHandler.SignUp)
+
+	return router
+}
+
+type UsersHandler interface {
+	SignUp(c *gin.Context)
+}
+
+type usersHandler struct {
+	service auth.UsersService
+}
+
+func NewAuthHandler(service auth.UsersService) UsersHandler {
+	return &usersHandler{
+		service: service,
+	}
+}
+
+func (h *usersHandler) SignUp(c *gin.Context) {
+	ctx := c.Request.Context()
+	var payload *domain.SignUpInput
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(errors.NewBadRequestError(err.Error()).Status, errors.NewBadRequestError("invalid json body"))
+		return
+	}
+
+	err := h.service.CreateUser(payload, ctx)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+}

@@ -5,7 +5,6 @@ import (
 	"rarefinds-backend/common/date_db"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product/domain"
-	"rarefinds-backend/internal/product/repository"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,10 +15,10 @@ type ProductsService interface {
 }
 
 type productsService struct {
-	repository repository.ProductsRep
+	repository ProductsRep
 }
 
-func NewService(rep repository.ProductsRep) ProductsService {
+func NewService(rep ProductsRep) ProductsService {
 	return &productsService{
 		repository: rep,
 	}

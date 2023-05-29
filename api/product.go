@@ -4,7 +4,6 @@ import (
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product"
 	"rarefinds-backend/internal/product/domain"
-	"rarefinds-backend/internal/product/repository"
 	"fmt"
 	"net/http"
 
@@ -14,7 +13,7 @@ import (
 
 func StartProducts() http.Handler {
 	var router = gin.Default()
-	productHandler := NewHandler(product.NewService(repository.NewRepository()))
+	productHandler := NewProductsHandler(product.NewService(product.NewRepository()))
 
 	router.Use(cors.Default())
 
@@ -35,7 +34,7 @@ type productsHandler struct {
 	service product.ProductsService
 }
 
-func NewHandler(service product.ProductsService) ProductsHandler {
+func NewProductsHandler(service product.ProductsService) ProductsHandler {
 	return &productsHandler{
 		service: service,
 	}
