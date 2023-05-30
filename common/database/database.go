@@ -32,3 +32,4 @@ func init() {
 	Products = client.Database(dataBase).Collection("products")
 	Users = client.Database(dataBase).Collection("users")
 }
+ 

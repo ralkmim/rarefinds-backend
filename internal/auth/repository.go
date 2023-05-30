@@ -14,6 +14,7 @@ import (
 
 type UsersRep interface {
 	CreateUser(domain.User, context.Context) *errors.Error
+	GetLogin(*domain.User, context.Context) *errors.Error
 }
 
 type usersRep struct {}
@@ -44,6 +45,25 @@ func (r *usersRep) CreateUser(user domain.User, ctx context.Context) *errors.Err
 	
 	return nil
 }
+
+func (r *usersRep) GetLogin(user *domain.User, ctx context.Context) *errors.Error {
+	filter := bson.M{
+		"$and": []bson.M{
+			{"password": user.Password},
+			{"$or": []bson.M{
+				{"email": user.Email},
+				{"username": user.Username},
+			}},
+		},
+	}
+
+	err := database.Users.FindOne(ctx, filter).Decode(&user)
+	if err != nil {
+		return errors.NewBadRequestError("invalid credentials")
+	}
+
+	return nil
+} 
 
 func (r *usersRep) GetByEmail(user *domain.User, ctx context.Context) *errors.Error {
 	err := database.Users.FindOne(ctx, bson.M{"email": strings.ToLower(user.Email)}).Decode(&user)

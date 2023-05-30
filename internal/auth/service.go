@@ -5,13 +5,17 @@ import (
 	"rarefinds-backend/common/crypto_utils"
 	"rarefinds-backend/common/date_db"
 	"rarefinds-backend/common/errors"
+	"rarefinds-backend/common/jwt_token"
 	"rarefinds-backend/internal/auth/domain"
+	"strings"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UsersService interface {
 	CreateUser(*domain.SignUpInput, context.Context) *errors.Error
+	LoginUser(*domain.SignInInput, context.Context) (string, *errors.Error)
 }
 
 type usersService struct {
@@ -42,4 +46,23 @@ func (s *usersService) CreateUser(payload *domain.SignUpInput, ctx context.Conte
 	}
 
 	return nil
+}
+
+func (s *usersService) LoginUser(payload *domain.SignInInput, ctx context.Context) (string, *errors.Error) {
+	user := &domain.User{
+		Email: strings.ToLower(payload.Email),
+		Username: payload.Username,
+		Password: crypto_utils.GetMd5(payload.Password),
+	}
+
+	if err := s.repository.GetLogin(user, ctx); err != nil {
+		return "", err
+	}
+
+	token, err := jwt_token.GenerateToken(60*time.Minute, user.ID, "UbjV&dxxc3dk6wTU")
+	if err != nil {
+		return "", errors.NewBadRequestError(err.Error())
+	}
+
+	return token, nil
 }
