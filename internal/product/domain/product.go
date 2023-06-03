@@ -13,6 +13,7 @@ type Product struct {
 	Condition			string					`json:"condition" bson:"condition"`
 	From				string					`json:"from" bson:"from"`
 	LimitedEdition		bool					`json:"limited_edition" bson:"limited_edition"`
+	OwnerID				string					`json:"owner_id" bson:"owner_id"`
 	CreatedAt			string					`json:"created_at" bson:"created_at"`
 	UpdatedAt			string					`json:"updated_at" bson:"updated_at"`
 }

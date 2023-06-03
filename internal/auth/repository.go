@@ -15,6 +15,7 @@ import (
 type UsersRep interface {
 	CreateUser(domain.User, context.Context) *errors.Error
 	GetLogin(*domain.User, context.Context) *errors.Error
+	GetById(primitive.ObjectID, context.Context) (*domain.UserResponse, *errors.Error)
 }
 
 type usersRep struct {}
@@ -63,7 +64,17 @@ func (r *usersRep) GetLogin(user *domain.User, ctx context.Context) *errors.Erro
 	}
 
 	return nil
-} 
+}
+
+func (r *usersRep) GetById(userId primitive.ObjectID, ctx context.Context) (*domain.UserResponse, *errors.Error) {
+	var user *domain.UserResponse
+	err := database.Users.FindOne(ctx, bson.M{"_id": userId}).Decode(&user)
+	if err != nil {
+		return nil, errors.NewNotFoundError("user not found")
+	}
+
+	return user, nil
+}
 
 func (r *usersRep) GetByEmail(user *domain.User, ctx context.Context) *errors.Error {
 	err := database.Users.FindOne(ctx, bson.M{"email": strings.ToLower(user.Email)}).Decode(&user)

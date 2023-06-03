@@ -16,6 +16,7 @@ import (
 type UsersService interface {
 	CreateUser(*domain.SignUpInput, context.Context) *errors.Error
 	LoginUser(*domain.SignInInput, context.Context) (string, *errors.Error)
+	GetUser(primitive.ObjectID, context.Context) (*domain.UserResponse, *errors.Error)
 }
 
 type usersService struct {
@@ -65,4 +66,13 @@ func (s *usersService) LoginUser(payload *domain.SignInInput, ctx context.Contex
 	}
 
 	return token, nil
+}
+
+func (s *usersService) GetUser(userId primitive.ObjectID, ctx context.Context) (*domain.UserResponse, *errors.Error) {
+	user, err := s.repository.GetById(userId, ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
