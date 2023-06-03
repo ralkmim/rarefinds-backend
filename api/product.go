@@ -1,13 +1,14 @@
 package api
 
 import (
+	"fmt"
+	"net/http"
 	"rarefinds-backend/common/errors"
 	"rarefinds-backend/internal/product"
 	"rarefinds-backend/internal/product/domain"
-	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func StartProducts(r *gin.RouterGroup) {
@@ -16,12 +17,16 @@ func StartProducts(r *gin.RouterGroup) {
 
 	r.POST("/new", productHandler.CreateProduct)
 	r.GET("/", productHandler.GetAll)
+	r.GET("/:id", productHandler.GetProduct)
+	r.GET("/search", productHandler.SearchProducts)
 	r.GET("/ping", productHandler.Ping)
 }
 
 type ProductsHandler interface {
 	CreateProduct(*gin.Context)
 	GetAll(*gin.Context)
+	GetProduct(*gin.Context)
+	SearchProducts(*gin.Context)
 	Ping(*gin.Context)
 }
 
@@ -63,6 +68,41 @@ func (h *productsHandler) GetAll(c *gin.Context) {
 
 	c.JSON(http.StatusAccepted, clients)
 }
+
+func (h *productsHandler) GetProduct(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	productId, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "Cannot convert product id")
+		return
+	}
+
+	product, errr := h.service.GetProduct(productId, ctx)
+	if errr != nil {
+		c.JSON(http.StatusNotFound, "Product not found")
+		return
+	}
+
+	fmt.Println(&product)
+
+	c.JSON(http.StatusFound, &product)
+}
+
+func (h *productsHandler) SearchProducts(c *gin.Context) {
+	ctx := c.Request.Context()
+	search := c.Query("q")
+
+	products, err := h.service.SearchProducts(search, ctx)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusFound, products)
+}
+
+
 
 func (h *productsHandler) Ping(c *gin.Context) {
 	c.String(200, "Pong!")
