@@ -14,6 +14,8 @@ import (
 type ProductsRep interface {
 	CreateProduct(domain.Product) *errors.Error
 	GetAll(context.Context) ([]domain.Product, *errors.Error)
+	GetById(primitive.ObjectID, context.Context) (*domain.Product, *errors.Error)
+	SearchProducts(string, context.Context) ([]domain.Product, *errors.Error)
 }
 
 type productsRep struct {}
@@ -58,4 +60,45 @@ func (r *productsRep) GetAll(ctx context.Context) ([]domain.Product, *errors.Err
 	}
 
 	return products, nil
+}
+
+func (r *productsRep) GetById(productId primitive.ObjectID, ctx context.Context) (*domain.Product, *errors.Error) {
+	var product *domain.Product
+	err := database.Products.FindOne(ctx, bson.M{"_id": productId}).Decode(&product)
+	if err != nil {
+		return nil, errors.NewNotFoundError("product not found")
+	}
+
+	return product, nil
+}
+
+func (r *productsRep) SearchProducts(search string, ctx context.Context) ([]domain.Product, *errors.Error) {
+	filter := bson.M {
+		"$or": []bson.M{
+			{
+				"name": bson.M{
+					"$regex": primitive.Regex{
+						Pattern: search,
+						Options: "i",
+					},
+				},
+			},
+		},
+	}
+
+	cursor, err := database.Products.Find(ctx, filter)
+	if err != nil {
+		return nil, errors.NewInternalServerError("database error")
+	}
+
+	results := make([]domain.Product, 0)
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, errors.NewInternalServerError("database error")
+	}
+
+	if len(results) == 0 {
+		return nil, errors.NewNotFoundError("no clients matching search")
+	}
+
+	return results, nil
 }

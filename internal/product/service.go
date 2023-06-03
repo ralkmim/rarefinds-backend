@@ -12,6 +12,8 @@ import (
 type ProductsService interface {
 	CreateProduct(domain.Product) (*domain.Product, *errors.Error)
 	GetAll(context.Context) ([]domain.Product, *errors.Error)
+	GetProduct(primitive.ObjectID, context.Context) (*domain.Product, *errors.Error)
+	SearchProducts(string, context.Context) ([]domain.Product, *errors.Error)
 }
 
 type productsService struct {
@@ -43,4 +45,17 @@ func (s *productsService) GetAll(ctx context.Context) ([]domain.Product, *errors
 
 	return products, err
 
+}
+
+func (s *productsService) GetProduct(productId primitive.ObjectID, ctx context.Context) (*domain.Product, *errors.Error) {
+	user, err := s.repository.GetById(productId, ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s *productsService) SearchProducts(search string, ctx context.Context) ([]domain.Product, *errors.Error) {
+	return s.repository.SearchProducts(search, ctx)
 }
