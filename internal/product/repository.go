@@ -83,6 +83,14 @@ func (r *productsRep) SearchProducts(search string, ctx context.Context) ([]doma
 					},
 				},
 			},
+			{
+				"owner_id":bson.M{
+					"$regex": primitive.Regex{
+						Pattern: search,
+						Options: "i",
+					},
+				},
+			},
 		},
 	}
 
