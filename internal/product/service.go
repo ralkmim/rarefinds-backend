@@ -27,6 +27,10 @@ func NewService(rep ProductsRep) ProductsService {
 }
 
 func (s *productsService) CreateProduct(product domain.Product) (*domain.Product, *errors.Error) {
+	if err := product.Validate(); err != nil {
+		return nil, err
+	}
+
 	product.ID = primitive.NewObjectID()
 	product.CreatedAt = date_db.GetNowDBFormat()
 
