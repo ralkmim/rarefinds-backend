@@ -15,6 +15,7 @@ const (
 
 var (
 	Products *mongo.Collection
+	Users *mongo.Collection
 )
 
 func init() {
@@ -29,4 +30,6 @@ func init() {
 	log.Println("database successfully configured")
 
 	Products = client.Database(dataBase).Collection("products")
+	Users = client.Database(dataBase).Collection("users")
 }
+ 
