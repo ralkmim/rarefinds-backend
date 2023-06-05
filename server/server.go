@@ -19,7 +19,7 @@ func StartServer() {
 
 	router.Use(cors.New(cors.Config{
 		// AllowAllOrigins: 	true,
-		AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500", "https://rarefinds.herokuapp.com", "http://localhost:9090", "https://rare-finds.github.io"},
+		AllowOrigins: 		[]string{"http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5500", "https://rarefinds.herokuapp.com", "http://localhost:9090", "https://rare-finds.github.io", "https://silver-faloodeh-b5cec3.netlify.app"},
 		AllowMethods: 		[]string{"PUT","PATCH","GET","DELETE","POST","OPTIONS"},
 		AllowHeaders: 		[]string{"Origin","Content-type","Authorization","Content-Length","Content-Language",
 										"Content-Disposition","User-Agent","Referrer","Host","Access-Control-Allow-Origin","sentry-trace"},
